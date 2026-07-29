@@ -1029,6 +1029,17 @@
 </head>
 
 <body>
+
+  <!-- Música de fondo -->
+  <audio
+    id="backgroundMusic"
+    src="/PossibleDreams.mp3"
+    autoplay
+    loop
+    preload="auto"
+    playsinline
+  ></audio>
+
   <div class="background-glow" aria-hidden="true">
     <span class="glow one"></span>
     <span class="glow two"></span>
@@ -1107,7 +1118,7 @@
       <button class="close-letter" id="closeLetter" type="button" aria-label="Cerrar carta">×</button>
 
       <header class="letter-header">
-        <span class="date">28 de julio · Tus 24 años</span>
+        <span class="date">28 de julio · 24 años</span>
         <h2 id="letterTitle">Para mi querida Maye</h2>
       </header>
 
@@ -1166,6 +1177,10 @@
           tan intenso.
         </p>
 
+        <p>
+          FELIZ CUMPLEAÑOS FEBE!!!
+        </p>
+
         <p class="highlight" style="font-size:1.22rem; text-align:center;">
           Te quiero con amor. ❤️
         </p>
@@ -1181,6 +1196,43 @@
   </div>
 
   <script>
+
+    /* Música de fondo.
+       Se intenta reproducir automáticamente al cargar la página.
+       Si el navegador del celular bloquea el autoplay con sonido,
+       se inicia en la primera interacción de la usuaria. */
+    const backgroundMusic = document.getElementById("backgroundMusic");
+    let musicStarted = false;
+
+    function removeMusicFallbackListeners() {
+      document.removeEventListener("click", startBackgroundMusic);
+      document.removeEventListener("pointerdown", startBackgroundMusic);
+      document.removeEventListener("touchstart", startBackgroundMusic);
+      document.removeEventListener("keydown", startBackgroundMusic);
+    }
+
+    async function startBackgroundMusic() {
+      if (!backgroundMusic || musicStarted) return;
+
+      backgroundMusic.volume = 0.45;
+
+      try {
+        await backgroundMusic.play();
+        musicStarted = true;
+        removeMusicFallbackListeners();
+      } catch (error) {
+        // Algunos navegadores móviles exigen una primera interacción.
+      }
+    }
+
+    window.addEventListener("load", startBackgroundMusic);
+    document.addEventListener("DOMContentLoaded", startBackgroundMusic);
+
+    document.addEventListener("click", startBackgroundMusic);
+    document.addEventListener("pointerdown", startBackgroundMusic);
+    document.addEventListener("touchstart", startBackgroundMusic, { passive: true });
+    document.addEventListener("keydown", startBackgroundMusic);
+
     const introScreen = document.getElementById("introScreen");
     const letterScreen = document.getElementById("letterScreen");
     const skipIntro = document.getElementById("skipIntro");
